@@ -29,9 +29,9 @@ restService.post('/hook', function (req, res) {
                     //speech += 'action: ' + requestBody.result.action;
                 }
                if (requestBody.result.parameters) {
-                   speech += 'sales for '+ requestBody.result.parameters + ' are doing awesome!'
+                   speech += 'sales for '+ requestBody.result.parameters.brand + ' are doing awesome!';
                } else {
-                   speech += 'Sorry, I did not get any brand'
+                   speech += 'Sorry, I did not get any brand';
                }
             }
         }
