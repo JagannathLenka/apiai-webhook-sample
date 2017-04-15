@@ -26,9 +26,13 @@ restService.post('/hook', function (req, res) {
                 }
 
                 if (requestBody.result.action) {
-                    speech += JSON.stringify(requestBody.result);
-                    speech += 'action: ' + requestBody.result.action;
+                    //speech += 'action: ' + requestBody.result.action;
                 }
+               if (requestBody.result.parameters) {
+                   speech += 'sales for '+ requestBody.result.parameters + ' are doing awesome!'
+               } else {
+                   speech += 'Sorry, I did not get any brand'
+               }
             }
         }
 
