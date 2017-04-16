@@ -29,7 +29,7 @@ restService.post('/hook', function (req, res) {
                     //speech += 'action: ' + requestBody.result.action;
                 }
                if (requestBody.result.parameters) {
-                   speech += 'Overall sales we are doing good today. It is slightly more than last year same time.';
+                   speech += 'Overall sales we are doing good today. It is slightly more than last year same time. ';
                    speech += 'Do you want to know, sales figure for any specific brand';
                    //speech += 'sales for '+ requestBody.result.parameters.brand + ' are doing awesome!';
                } else {
