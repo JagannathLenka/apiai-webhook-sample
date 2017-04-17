@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 
 
 const restService = express();
+var repeat = false;
 restService.use(bodyParser.json());
 
 restService.post('/hook', function (req, res) {
@@ -45,11 +46,19 @@ restService.post('/hook', function (req, res) {
         } 
         console.log('result: ', speech);
 
-        return res.json({
-            speech: speech,
-            displayText: speech,
-            source: 'apiai-webhook-sample'
-        });
+        if (repeat == true) {
+            return res.json({
+                speech: speech,
+                displayText: speech,
+                source: 'apiai-webhook-sample',
+                followupEvent: 'overall-sales - yes - custom'
+            }) else {
+            return res.json({
+               speech: speech,
+               displayText: speech,
+               source: 'apiai-webhook-sample'
+            })
+        };
     } catch (err) {
         console.error("Can't process request", err);
 
@@ -89,7 +98,8 @@ function salesByBrand(parameters) {
       speech += 'sales for ' + parameters.brand + ' $800K already, trends similar to last year. Hopefully it will be better after 10 am'
       break;        
     default:
-        speech += 'sorry, I am not able to find any sales for ' + parameters.brand ;
+      speech += 'sorry, I am not able to find any sales for ' + parameters.brand ;
+      repeat = true;
 }
     
     return speech;
