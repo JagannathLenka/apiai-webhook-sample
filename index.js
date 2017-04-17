@@ -98,7 +98,7 @@ function salesByBrand(parameters) {
     
     switch(parameters.brand) {
     case 'sup':
-      speech += 'sales for ' + parameters.brand + ' $3M already, we are seeing a good trend'
+      speech += 'sales for ' + parameters.brand + ' $3M already, we are seeing a good trend.'
       break;
     case 'mir kids':
       speech += 'sales for ' + parameters.brand + ' $200K already, trends are poor so far'
