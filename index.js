@@ -80,13 +80,13 @@ function salesByBrand(parameters) {
     
     switch(parameters.brand) {
     case 'sup':
-      speech += 'sales for ' + parameters.brand + '$3M already, we are seeing a good trend'
+      speech += 'sales for ' + parameters.brand + ' $3M already, we are seeing a good trend'
       break;
     case 'mir kids':
-      speech += 'sales for ' + parameters.brand + '$200K already, trends are poor so far'
+      speech += 'sales for ' + parameters.brand + ' $200K already, trends are poor so far'
       break;
     case 'ran ':
-      speech += 'sales for ' + parameters.brand + '$800K already, trends similar to last year. Hopefully it will be better after 10 am'
+      speech += 'sales for ' + parameters.brand + ' $800K already, trends similar to last year. Hopefully it will be better after 10 am'
       break;        
     default:
         speech += 'sorry, I am not able to find any sales for ' + parameters.brand ;
