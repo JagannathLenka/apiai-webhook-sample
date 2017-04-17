@@ -63,10 +63,7 @@ restService.listen((process.env.PORT || 5000), function () {
 
 function overallSales(parameters) {
     var speech = '' ;
-    if (parameters.brand == 'gap') {
-        speech = 'sales for ' + parameters.brand + ' is doing good';
-    }
-    
-    return speech;     
+    return 'sales for ' + parameters.brand + ' is doing good';
+  
 }
                 
