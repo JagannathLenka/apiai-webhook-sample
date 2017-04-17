@@ -89,9 +89,9 @@ function salesByBrand(parameters) {
       speech += 'sales for ' + parameters.brand + '$800K already, trends similar to last year. Hopefully it will be better after 10 am'
       break;        
     default:
-        speech += 'sorry, I am not able to find it';
+        speech += 'sorry, I am not able to find any sales for ' + parameters.brand ;
 }
     
-    return 'sales for ' + parameters.brand + ' is good';
+    return speech;
   
 }
