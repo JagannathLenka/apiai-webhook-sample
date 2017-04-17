@@ -7,12 +7,12 @@ const bodyParser = require('body-parser');
 const restService = express();
 var repeat = false;
 
-function setRepeat(repeat) {
-    this.repeat = repeat;
+function setRepeat(data) {
+    repeat = repeat;
 }
 
 function getRepeat() {
-   return this.repeat;
+   return repeat;
 }
 
 restService.use(bodyParser.json());
