@@ -30,10 +30,11 @@ restService.post('/hook', function (req, res) {
                     
                     switch(requestBody.result.action) {
                         case 'overall-sales':
-                          speech += overallSales(requestBody.result.parameters)
+                          speech += overallSales(requestBody.result.parameters);
                           break;
                         case 'overall-sales.overall-sales-yes.overall-sales-yes-custom':
-                            speech += salesByBrand(requestBody.result.parameters)
+                            speech += salesByBrand(requestBody.result.parameters);
+                            break
                         default:
                             speech += 'sorry, I am not able to find it';
                     }
@@ -76,6 +77,21 @@ function overallSales(parameters) {
                 
 function salesByBrand(parameters) {
     var speech = '' ;
+    
+    switch(parameters.brand) {
+    case 'sup':
+      speech += 'sales for ' + parameters.brand + '$3M already, we are seeing a good trend'
+      break;
+    case 'mir kids':
+      speech += 'sales for ' + parameters.brand + '$200K already, trends are poor so far'
+      break;
+    case 'ran ':
+      speech += 'sales for ' + parameters.brand + '$800K already, trends similar to last year. Hopefully it will be better after 10 am'
+      break;        
+    default:
+        speech += 'sorry, I am not able to find it';
+}
+    
     return 'sales for ' + parameters.brand + ' is good';
   
 }
