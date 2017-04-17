@@ -40,6 +40,9 @@ restService.post('/hook', function (req, res) {
                         case 'overall-sales.overall-sales-yes.overall-sales-yes-custom':
                             speech += salesByBrand(requestBody.result.parameters);
                             break
+                        case 'overall-sales.overall-sales-yes.overall-sales-yes-custom.overall-sales-yes-custom-fallback'
+                            speech += salesByBrand(requestBody.result.parameters);
+                            break
                         default:
                             speech += 'sorry, I am not able to find it';
                     }
