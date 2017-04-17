@@ -63,7 +63,7 @@ restService.listen((process.env.PORT || 5000), function () {
 
 function overallSales(parameters) {
     var speech = '' ;
-    return 'sales for ' + parameters.brand + ' is doing good';
+    return 'sales for ' + parameters.date + ' is good compared to last year';
   
 }
                 
