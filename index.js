@@ -27,9 +27,16 @@ restService.post('/hook', function (req, res) {
 
                 if (requestBody.result.action) {
                 
-                    if (requestBody.result.action == 'overall-sales') {
-                        speech += overallSales(requestBody.result.parameters)
-                    }    
+                    
+                    switch(requestBody.result.action) {
+                        case 'overall-sales':
+                          speech += overallSales(requestBody.result.parameters)
+                          break;
+                        case 'overall-sales.overall-sales-yes.overall-sales-yes-custom':
+                            speech += salesByBrand(requestBody.result.parameters)
+                        default:
+                            speech += 'sorry, I am not able to find it';
+                    }
 
                 }
         
@@ -67,3 +74,8 @@ function overallSales(parameters) {
   
 }
                 
+function salesByBrand(parameters) {
+    var speech = '' ;
+    return 'sales for ' + parameters.brand + ' is good compared to last year. Do you want to know the sales for any specific brand?';
+  
+}
