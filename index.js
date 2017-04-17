@@ -6,6 +6,15 @@ const bodyParser = require('body-parser');
 
 const restService = express();
 var repeat = false;
+
+function setRepeat(repeat) {
+    this.repeat = repeat;
+}
+
+function getRepeat() {
+   return this.repeat;
+}
+
 restService.use(bodyParser.json());
 
 restService.post('/hook', function (req, res) {
@@ -46,7 +55,7 @@ restService.post('/hook', function (req, res) {
         } 
         console.log('result: ', speech);
 
-        if (repeat == true) {
+        if (getRepeat() == true) {
             return res.json({
                 speech: speech,
                 displayText: speech,
@@ -99,7 +108,7 @@ function salesByBrand(parameters) {
       break;        
     default:
       speech += 'sorry, I am not able to find any sales for ' + parameters.brand ;
-      repeat = true;
+      setRepeat(true);
 }
     
     return speech;
