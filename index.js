@@ -76,6 +76,6 @@ function overallSales(parameters) {
                 
 function salesByBrand(parameters) {
     var speech = '' ;
-    return 'sales for ' + parameters.brand + ' is good compared to last year. Do you want to know the sales for any specific brand?';
+    return 'sales for ' + parameters.brand + ' is good';
   
 }
