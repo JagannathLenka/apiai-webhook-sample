@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 
 const restService = express();
 var repeat = false;
+var followupEvent = '';
 
 function setRepeat(data) {
     repeat = repeat;
@@ -13,6 +14,14 @@ function setRepeat(data) {
 
 function getRepeat() {
    return repeat;
+}
+
+function setFollowupEvent(followupEventData) {
+    followupEvent = followupEventData;
+}
+
+function getFollowupEvent() {
+   return followupEvent ;
 }
 
 restService.use(bodyParser.json());
@@ -53,21 +62,13 @@ restService.post('/hook', function (req, res) {
         } 
         console.log('result: ', speech);
 
-        if (getRepeat() == true) {
-            return res.json({
-                speech: speech,
-                displayText: speech,
-                source: 'apiai-webhook-sample',
-                followupEvent: 'overall-sales - yes - custom'
-            }) 
-        }   else {
-            return res.json({
-               speech: speech,
-               displayText: speech,
-               source: 'apiai-webhook-sample'
-            })
-        };
-
+        return res.json({
+            speech: speech,
+            displayText: speech,
+            source: 'apiai-webhook-sample',
+            followupEvent: getFollowupEvent();
+          }) 
+        
     } catch (err) {
         console.error("Can't process request", err);
 
@@ -89,7 +90,14 @@ restService.listen((process.env.PORT || 5000), function () {
 
 function overallSales(parameters) {
     var speech = '' ;
-    return 'sales for ' + parameters.date + ' is good compared to last year. Do you want to know the sales for any specific brand?';
+
+    switch {
+      case (!parameters.brand) 
+      return 'sales for ' + parameters.date + ' is good compared to last year. Do you want to know the sales for any specific brand?';
+      setFollowupEvent('overall-sales - brand')
+      break;
+    }
+        
   
 }
                 
