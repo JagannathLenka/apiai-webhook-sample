@@ -97,15 +97,18 @@ function salesByBrand(parameters) {
     var speech = '' ;
     
     switch(parameters.brand) {
-    case 'sup':
+    case 'super light':
       speech += 'sales for ' + parameters.brand + ' $3M already, we are seeing a good trend.'
       break;
-    case 'mir kids':
+    case 'megan':
       speech += 'sales for ' + parameters.brand + ' $200K already, trends are poor so far'
       break;
-    case 'ran ':
+    case 'new beauty':
       speech += 'sales for ' + parameters.brand + ' $800K already, trends similar to last year. Hopefully it will be better after 10 am'
-      break;        
+      break; 
+    case 'lux designer':
+      speech += 'sales for ' + parameters.brand + ' $800K already, trends similar to last year. Hopefully it will be better after 10 am'
+      break;         
     default:
       speech += 'sorry, I am not able to find any sales for ' + parameters.brand + '. Do you want to check any other brand?' ;
       setRepeat(true);
