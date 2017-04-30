@@ -110,7 +110,9 @@ function getResponse(speech, parameters) {
 function overallSales(parameters) {
     var speech = '' ;
 
-    console.log(parameters.brand );
+    console.log(parameters.brand);
+    console.log(parameters);
+
     switch(true) {
       case (parameters.hasOwnProperty('brand') && parameters.brand != '') :
         speech = 'sales for ' + parameters.date + ' is good compared to last year. Do you want to know the sales for any specific channel?';
