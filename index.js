@@ -91,10 +91,11 @@ function setSpeech(requestBody) {
 
 function getResponse(speech, parameters) {
                   
-  response = { speech: speech,
-              displayText: speech,
-              source: 'apiai-webhook-sample'
-            }
+  var response = 
+    { speech: speech,
+      displayText: speech,
+      source: 'apiai-webhook-sample'
+       }
 
   if (getFollowupEvent() != '') {
     response.followupEvent = {
