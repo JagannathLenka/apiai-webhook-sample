@@ -66,7 +66,10 @@ restService.post('/hook', function (req, res) {
             speech: speech,
             displayText: speech,
             source: 'apiai-webhook-sample',
-            followupEvent: getFollowupEvent()
+            followupEvent: {
+             name: getFollowupEvent(),
+             data: requestBody.result.parameters 
+            }
           }) 
         
     } catch (err) {
