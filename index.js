@@ -64,6 +64,7 @@ function getFollowupEvent() {
 function setSpeech(requestBody) {
 
   var speech = '';
+  setFollowupEvent('');
   if (requestBody.result) {
 
         if (requestBody.result.action) {
