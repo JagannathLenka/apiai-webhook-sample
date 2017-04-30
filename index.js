@@ -23,7 +23,7 @@ restService.post('/hook', function (req, res) {
         } 
 
         console.log('result: ', speech);
-        return res.json(getResponse(speech, request.body)) 
+        return res.json(getResponse(speech, req.body)) 
         
     } catch (err) {
         console.error("Can't process request", err);
