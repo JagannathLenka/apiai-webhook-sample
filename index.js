@@ -62,15 +62,7 @@ restService.post('/hook', function (req, res) {
         } 
         console.log('result: ', speech);
 
-        return res.json({
-            speech: speech,
-            displayText: speech,
-            source: 'apiai-webhook-sample',
-            followupEvent: {
-             name: getFollowupEvent(),
-             data: requestBody.result.parameters 
-            }
-          }) 
+        return res.json(getResponse(request.body)) 
         
     } catch (err) {
         console.error("Can't process request", err);
@@ -89,16 +81,35 @@ restService.post('/hook', function (req, res) {
 restService.listen((process.env.PORT || 5000), function () {
     console.log("Server listening");
 });
-                
+        
+
+function getResponse(parameters) {
+                  
+  response = { speech: speech,
+              displayText: speech,
+              source: 'apiai-webhook-sample'
+            }
+
+  if (getFollowupEvent() != '') {
+    response.followupEvent = {
+             name: getFollowupEvent(),
+             data: parameters 
+            }
+          }
+  return response;        
+}          
+          
 
 function overallSales(parameters) {
     var speech = '' ;
 
     switch(true) {
-      case (!parameters.brand) :
+      case (parameters.brand) :
         speech = 'sales for ' + parameters.date + ' is good compared to last year. Do you want to know the sales for any specific brand?';
         setFollowupEvent('overall-sales-brand')
         break;
+      default
+        
     }
         
   return speech;
