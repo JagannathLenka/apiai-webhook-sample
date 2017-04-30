@@ -8,21 +8,6 @@ const restService = express();
 var repeat = false;
 var followupEvent = '';
 
-function setRepeat(data) {
-    repeat = repeat;
-}
-
-function getRepeat() {
-   return repeat;
-}
-
-function setFollowupEvent(followupEventData) {
-    followupEvent = followupEventData;
-}
-
-function getFollowupEvent() {
-   return followupEvent ;
-}
 
 restService.use(bodyParser.json());
 
@@ -34,35 +19,11 @@ restService.post('/hook', function (req, res) {
         var speech = 'empty speech';
 
         if (req.body) {
-            var requestBody = req.body;
-
-            if (requestBody.result) {
-                speech = '';
-
-                if (requestBody.result.action) {
-                
-                    
-                    switch(requestBody.result.action) {
-                        case 'overall-sales':
-                          speech += overallSales(requestBody.result.parameters);
-                          break;
-                        case 'overall-sales.overall-sales-yes.overall-sales-yes-custom':
-                            speech += salesByBrand(requestBody.result.parameters);
-                            break;
-                        case 'brand-fallback':
-                            speech += salesByBrand(requestBody.result.parameters);
-                            break;
-                        default:
-                            speech += 'sorry, I am not able to find it';
-                    }
-
-                }
-        
-            }
+            speech = setSpeech(req.body);
         } 
-        console.log('result: ', speech);
 
-        return res.json(getResponse(request.body)) 
+        console.log('result: ', speech);
+        return res.json(getResponse(speech, request.body)) 
         
     } catch (err) {
         console.error("Can't process request", err);
@@ -83,7 +44,52 @@ restService.listen((process.env.PORT || 5000), function () {
 });
         
 
-function getResponse(parameters) {
+function setRepeat(data) {
+    repeat = repeat;
+}
+
+function getRepeat() {
+   return repeat;
+}
+
+function setFollowupEvent(followupEventData) {
+    followupEvent = followupEventData;
+}
+
+function getFollowupEvent() {
+   return followupEvent ;
+}
+
+
+function setSpeech(requestBody) {
+
+  var speech = '';
+  if (requestBody.result) {
+
+        if (requestBody.result.action) {
+        
+          
+          switch(requestBody.result.action) {
+              case 'overall-sales':
+                speech += overallSales(requestBody.result.parameters);
+                break;
+              case 'overall-sales.overall-sales-yes.overall-sales-yes-custom':
+                  speech += salesByBrand(requestBody.result.parameters);
+                  break;
+              case 'brand-fallback':
+                  speech += salesByBrand(requestBody.result.parameters);
+                  break;
+              default:
+                  speech += 'sorry, I am not able to find it';
+          }
+
+        }
+
+    }
+  return speech;
+}
+
+function getResponse(speech, parameters) {
                   
   response = { speech: speech,
               displayText: speech,
@@ -106,10 +112,11 @@ function overallSales(parameters) {
     switch(true) {
       case (parameters.brand) :
         speech = 'sales for ' + parameters.date + ' is good compared to last year. Do you want to know the sales for any specific brand?';
-        setFollowupEvent('overall-sales-brand')
+        setFollowupEvent('overall-sales-brand');
         break;
-      default
-        
+      default :
+        speech = 'sales for ' + parameters.date + ' is good compared to last year. Do you want to know the sales for any specific brand?';
+        break;
     }
         
   return speech;
