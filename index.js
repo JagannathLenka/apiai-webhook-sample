@@ -73,7 +73,7 @@ function setSpeech(requestBody) {
               case 'overall-sales':
                 speech += overallSales(requestBody.result.parameters);
                 break;
-              case 'overall-sales.overall-sales-yes.overall-sales-yes-custom':
+              case 'overall-sales-brand':
                   speech += salesByBrand(requestBody.result.parameters);
                   break;
               case 'brand-fallback':
@@ -112,7 +112,7 @@ function overallSales(parameters) {
 
     console.log(parameters.brand );
     switch(true) {
-      case (parameters.hasOwnProperty('brand')) :
+      case (parameters.hasOwnProperty('brand') && parameters.brand != '') :
         speech = 'sales for ' + parameters.date + ' is good compared to last year. Do you want to know the sales for any specific channel?';
         setFollowupEvent('overall-sales-brand');
         console.log(getFollowupEvent());
