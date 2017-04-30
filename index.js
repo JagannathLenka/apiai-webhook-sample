@@ -65,7 +65,8 @@ restService.post('/hook', function (req, res) {
         return res.json({
             speech: speech,
             displayText: speech,
-            source: 'apiai-webhook-sample'
+            source: 'apiai-webhook-sample',
+            followupEvent: getFollowupEvent()
           }) 
         
     } catch (err) {
@@ -93,7 +94,7 @@ function overallSales(parameters) {
     switch(true) {
       case (!parameters.brand) :
         speech = 'sales for ' + parameters.date + ' is good compared to last year. Do you want to know the sales for any specific brand?';
-        setFollowupEvent('overall-sales - brand')
+        setFollowupEvent('overall-sales-brand')
         break;
     }
         
