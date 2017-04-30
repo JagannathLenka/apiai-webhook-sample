@@ -93,12 +93,12 @@ function overallSales(parameters) {
 
     switch(true) {
       case (!parameters.brand) :
-      return 'sales for ' + parameters.date + ' is good compared to last year. Do you want to know the sales for any specific brand?';
-      setFollowupEvent('overall-sales - brand')
-      break;
+        speech = 'sales for ' + parameters.date + ' is good compared to last year. Do you want to know the sales for any specific brand?';
+        setFollowupEvent('overall-sales - brand')
+        break;
     }
         
-  
+  return speech;
 }
                 
 function salesByBrand(parameters) {
