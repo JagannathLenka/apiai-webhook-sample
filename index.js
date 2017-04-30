@@ -112,7 +112,7 @@ function overallSales(parameters) {
 
     console.log(parameters.brand );
     switch(true) {
-      case (parameters.brand != '') :
+      case (!parameters.brand  || parameters.brand != '') :
         speech = 'sales for ' + parameters.date + ' is good compared to last year. Do you want to know the sales for any specific channel?';
         setFollowupEvent('overall-sales-brand');
         console.log(getFollowupEvent());
