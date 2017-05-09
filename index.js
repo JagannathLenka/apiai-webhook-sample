@@ -116,9 +116,7 @@ function overallSales(parameters) {
 
     switch(true) {
       case (parameters.hasOwnProperty('brand') && parameters.brand != '') :
-        speech = 'sales for ' + parameters.date + ' is good compared to last year. Do you want to know the sales for any specific channel?';
-        setFollowupEvent('overall-sales-brand');
-        console.log(getFollowupEvent());
+        speech = 'Good News, Sales for ' + parameters.date + ' is $4.5M already. This is better compared to last year.';
         break;
       default :
         speech = 'sales for ' + parameters.date + ' is good compared to last year. Do you want to know the sales for any specific brand?';
