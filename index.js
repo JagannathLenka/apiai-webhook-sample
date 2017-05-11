@@ -74,7 +74,7 @@ function setSpeech(requestBody) {
               case 'overall-sales':
                 speech += overallSales(requestBody.result.parameters);
                 break;
-              case 'overall-sales-brand':
+              case 'sales-by-brand':
                   speech += salesByBrand(requestBody.result.parameters);
                   break;
               case 'brand-fallback':
