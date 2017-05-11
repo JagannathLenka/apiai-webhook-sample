@@ -77,6 +77,9 @@ function setSpeech(requestBody) {
               case 'sales-by-brand':
                   speech += salesByBrand(requestBody.result.parameters);
                   break;
+              case 'sales-by-channel-brand':
+                  speech += salesByChannelBrand(requestBody.result.parameters);
+                  break;
               case 'brand-fallback':
                   speech += salesByBrand(requestBody.result.parameters);
                   break;
@@ -134,6 +137,39 @@ function salesByBrand(parameters) {
       speech += 'sales for ' + parameters.brand + ' $3M already, we are seeing a good trend.'
       break;
     case 'home':
+      speech += 'sales for ' + parameters.brand + ' $200K already, trends are poor so far'
+      break;
+    case 'new marshal':
+      speech += 'sales for ' + parameters.brand + ' $800K already, trends similar to last year. Hopefully it will be better after 10 am'
+      break; 
+    case 'prestige':
+      speech += 'sales for ' + parameters.brand + ' $800K already, trends similar to last year. Hopefully it will be better after 10 am'
+      break;         
+    default:
+      speech += 'sorry, I am not able to find any sales for ' + parameters.brand + '. Do you want to check any other brand?' ;
+}
+    
+    return speech;
+  
+}
+
+function salesByChannelBrand(parameters) {
+    var speech = '' ;
+    
+    switch(1==1) {
+    case parameters.brand == 'barn' && parameters.channel == 'online':
+      speech += 'sales for ' + parameters.brand + parameters.channel  + ' $2M already, we are seeing a good trend for today. All the best !'
+      break;
+
+    case parameters.brand == 'barn' && parameters.channel == 'retail':
+      speech += 'sales for ' + parameters.brand + parameters.channel  + ' $3M already. sales are poor compared to last year on the same day!'
+      break; 
+
+    case parameters.brand == 'home' && parameters.channel == 'online':
+      speech += 'sales for ' + parameters.brand + parameters.channel  + ' $4M.'
+      break; 
+
+    case parameters.brand == 'home' && parameters.channel == 'retail':
       speech += 'sales for ' + parameters.brand + ' $200K already, trends are poor so far'
       break;
     case 'new marshal':
