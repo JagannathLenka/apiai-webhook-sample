@@ -7,42 +7,17 @@ const bodyParser = require('body-parser');
 const restService = express();
 var repeat = false;
 var followupEvent = '';
+var MongoClient = require('mongodb').MongoClient
+var mongo_collection = 'sales';
+var speech = 'empty speech';
 
+function setSpeech(newSpeech) {
+    speech = newSpeech;
+}
 
-restService.use(bodyParser.json());
-
-restService.post('/hook', function (req, res) {
-
-    console.log('hook request');
-
-    try {
-        var speech = 'empty speech';
-
-        if (req.body) {
-            speech = setSpeech(req.body);
-        } 
-
-        console.log('result: ', speech);
-        return res.json(getResponse(speech, req.body.result.parameters)) 
-        
-    } catch (err) {
-        console.error("Can't process request", err);
-
-        return res.status(400).json({
-            status: {
-                code: 400,
-                errorType: err.message
-            }
-        });
-    }
-});
-                
-                
-
-restService.listen((process.env.PORT || 5000), function () {
-    console.log("Server listening");
-});
-        
+function getSpeech() {
+   return speech;
+}
 
 function setRepeat(data) {
     repeat = repeat;
@@ -61,37 +36,46 @@ function getFollowupEvent() {
 }
 
 
-function setSpeech(requestBody) {
 
-  var speech = '';
+restService.use(bodyParser.json());
+
+restService.post('/hook', function (req, res) {
+
+    try {
+          speech = setSpeech(res, req.body);
+          return;
+    } catch (err) {
+        console.error("Can't process request", err);
+
+        return res.status(400).json({
+            status: {
+                code: 400,
+                errorType: err.message
+            }
+        });
+    }
+});
+                
+                
+restService.listen((process.env.PORT || 5000), function () {
+    console.log("Server listening");
+});
+        
+
+
+function setSpeech(res, requestBody) { 
+
   setFollowupEvent('');
   if (requestBody.result) {
 
         if (requestBody.result.action) {
-        
-          
-          switch(requestBody.result.action) {
-              case 'overall-sales':
-                speech += overallSales(requestBody.result.parameters);
-                break;
-              case 'sales-by-brand':
-                  speech += salesByBrand(requestBody.result.parameters);
-                  break;
-              case 'sales-by-channel-brand':
-                  speech += salesByChannelBrand(requestBody.result.parameters);
-                  break;
-              case 'brand-fallback':
-                  speech += salesByBrand(requestBody.result.parameters);
-                  break;
-              default:
-                  speech += 'sorry, I am not able to find it';
-          }
-
+          getSalesFigureFromMongo(res, requestBody.result.parameters, requestBody.result.action)  
         }
-
     }
   return speech;
 }
+
+
 
 function getResponse(speech, parameters) {
                   
@@ -111,77 +95,105 @@ function getResponse(speech, parameters) {
 }          
           
 
-function overallSales(parameters) {
+
+function getSalesFigureFromMongo(res, parameters, action) {
+ 
+  var query = {"date":parameters.date};
+  const url = 'mongodb://jagannath_lenka:Apple123@ds031641.mlab.com:31641/nodejs';
+  var response = '';
+
+  MongoClient.connect(url, function(err, db) {
+    
+    var collection = db.collection(mongo_collection);
+    
+    if (query != null) {
+        collection.find(query).toArray(function(err, docs) {
+          
+          res.json(getResponse(getAction(parameters, action, docs), ''));
+
+        });  
+      db.close();
+    };
+  });
+  return response;
+}
+
+
+function getAction(parameters, action, docs) {
+
+  var speech = ''
+  switch(action) {
+        case 'overall-sales':
+          speech += overallSales(docs);
+          break;
+        case 'sales-by-brand':
+            speech += salesByBrand(parameters, docs);
+            break;
+        case 'sales-by-brand-channel':
+            speech += salesByBrandChannel(parameters, docs);
+            break;
+        case 'brand-fallback':
+            speech += salesByBrand(action);
+            break;
+        default:
+            speech += 'sorry, I am not able to find it';
+  }
+  console.log(speech);
+  return speech;
+}
+
+function overallSales(salesData) {
     var speech = '' ;
+    var totalSales = 0;
+ 
 
-    console.log(parameters.brand);
-    console.log(parameters);
+    for (var brand of salesData[0].brands) {
+      for (var channel of brand.channels) {
+        totalSales += channel.sales;
+      }
+    } 
 
-    switch(true) {
-      case (parameters.hasOwnProperty('brand') && parameters.brand != '') :
-        speech = 'Good News, Sales for ' + parameters.date + ' is $4.5M already. This is better compared to last year.';
-        break;
-      default :
-        speech = 'Good News, Sales for ' + parameters.date + ' is $4.5M already. This is better compared to last year.';
-        break;
-    }
-        
+    speech = 'Sales today is $' + totalSales;   
   return speech;
 }
                 
-function salesByBrand(parameters) {
+function salesByBrand(parameters, salesData) {
     var speech = '' ;
     
-    switch(parameters.brand) {
-    case 'barn':
-      speech += 'sales for ' + parameters.brand + ' $3M already, we are seeing a good trend.'
-      break;
-    case 'home':
-      speech += 'sales for ' + parameters.brand + ' $200K already, trends are poor so far'
-      break;
-    case 'new marshal':
-      speech += 'sales for ' + parameters.brand + ' $800K already, trends similar to last year. Hopefully it will be better after 10 am'
-      break; 
-    case 'prestige':
-      speech += 'sales for ' + parameters.brand + ' $800K already, trends similar to last year. Hopefully it will be better after 10 am'
-      break;         
-    default:
-      speech += 'sorry, I am not able to find any sales for ' + parameters.brand + '. Do you want to check any other brand?' ;
-}
-    
-    return speech;
+    var totalSales = 0;
+ 
+
+    for (var brand of salesData[0].brands) {
+      console.log(brand.brand + ' ' + parameters.brand)
+      if (brand.brand == parameters.brand) {
+        for (var channel of brand.channels) {
+          totalSales += channel.sales;
+        }
+      }
+    } 
+
+    speech = 'Sales for ' + parameters.brand + ' is $' + totalSales;   
+  return speech;
   
 }
 
-function salesByChannelBrand(parameters) {
+function salesByBrandChannel(parameters, salesData) {
     var speech = '' ;
-    
-    switch(1==1) {
-    case parameters.brand == 'barn' && parameters.channel == 'online':
-      speech += 'sales for ' + parameters.brand + parameters.channel  + ' $2M already, we are seeing a good trend for today. All the best !'
-      break;
+    var totalSales = 0;
 
-    case parameters.brand == 'barn' && parameters.channel == 'retail':
-      speech += 'sales for ' + parameters.brand + parameters.channel  + ' $3M already. sales are poor compared to last year on the same day!'
-      break; 
+    for (var brand of salesData[0].brands) {
+      console.log(brand.brand + ' ' + parameters.brand)
+      if (brand.brand == parameters.brand) {
+        for (var channel of brand.channels) {
+          if (channel.channel == parameters.channel) {
+            totalSales += channel.sales;
+          }  
+        }
+      }
+    } 
 
-    case parameters.brand == 'home' && parameters.channel == 'online':
-      speech += 'sales for ' + parameters.brand + parameters.channel  + ' $4M.'
-      break; 
-
-    case parameters.brand == 'home' && parameters.channel == 'retail':
-      speech += 'sales for ' + parameters.brand + ' $200K already, trends are poor so far'
-      break;
-    case 'new marshal':
-      speech += 'sales for ' + parameters.brand + ' $800K already, trends similar to last year. Hopefully it will be better after 10 am'
-      break; 
-    case 'prestige':
-      speech += 'sales for ' + parameters.brand + ' $800K already, trends similar to last year. Hopefully it will be better after 10 am'
-      break;         
-    default:
-      speech += 'sorry, I am not able to find any sales for ' + parameters.brand + '. Do you want to check any other brand?' ;
-}
-    
-    return speech;
+    speech = 'Sales for ' + parameters.brand + ' ' + parameters.channel + ' is $' + totalSales;   
+  return speech;
   
 }
+
