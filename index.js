@@ -10,6 +10,7 @@ var followupEvent = '';
 var MongoClient = require('mongodb').MongoClient
 var mongo_collection = 'sales';
 var speech = 'empty speech';
+var brands = ['home', 'barn']
 
 function setSpeech(newSpeech) {
     speech = newSpeech;
@@ -135,7 +136,7 @@ function getAction(parameters, action, docs) {
   var speech = ''
   switch(action) {
         case 'overall-sales':
-          speech += overallSales(docs);
+          speech += overallSales(parameters, docs);
           break;
         case 'sales-by-brand':
             speech += salesByBrand(parameters, docs);
@@ -153,7 +154,7 @@ function getAction(parameters, action, docs) {
   return speech;
 }
 
-function overallSales(salesData) {
+function overallSales(parameters, salesData) {
     var speech = '' ;
     var totalSales = 0;
  
@@ -164,7 +165,7 @@ function overallSales(salesData) {
       }
     } 
 
-    speech = 'Sales today is $' + totalSales;   
+    speech = 'Here are the sales figures for ' + parameters.date + ' Total sales for' + parameters.date + ' is $' + totalSales; 
   return speech;
 }
                 
