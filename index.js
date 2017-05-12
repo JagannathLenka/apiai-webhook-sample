@@ -113,8 +113,13 @@ function getSalesFigureFromMongo(res, parameters, action) {
             console.log(err)
             res.josn(err)
           } else {
+          console.log(docs)
+          if (docs.size > 0) {
+            res.json(getResponse(getAction(parameters, action, docs), ''));
+          }else {
+           res.json(getResponse("Sorry no data found" , '')); 
+          }
           
-          res.json(getResponse(getAction(parameters, action, docs), ''));
           }  
 
         });  
@@ -152,7 +157,7 @@ function overallSales(salesData) {
     var speech = '' ;
     var totalSales = 0;
  
-
+    console.log(salesData);
     for (var brand of salesData[0].brands) {
       for (var channel of brand.channels) {
         totalSales += channel.sales;
