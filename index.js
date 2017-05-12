@@ -108,8 +108,14 @@ function getSalesFigureFromMongo(res, parameters, action) {
     
     if (query != null) {
         collection.find(query).toArray(function(err, docs) {
+
+          if (err) {
+            console.log(err)
+            res.josn(err)
+          } else {
           
           res.json(getResponse(getAction(parameters, action, docs), ''));
+          }  
 
         });  
       db.close();
