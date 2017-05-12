@@ -114,7 +114,7 @@ function getSalesFigureFromMongo(res, parameters, action) {
             res.josn(err)
           } else {
           console.log(docs)
-          if (docs.size > 0) {
+          if (docs.length > 0) {
             res.json(getResponse(getAction(parameters, action, docs), ''));
           }else {
            res.json(getResponse("Sorry no data found" , '')); 
