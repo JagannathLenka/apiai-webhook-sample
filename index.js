@@ -10,7 +10,7 @@ var followupEvent = '';
 var MongoClient = require('mongodb').MongoClient
 var mongo_collection = 'sales';
 var speech = 'empty speech';
-var brands = ['home', 'barn']
+var allBrands = ['home', 'barn']
 
 function setSpeech(newSpeech) {
     speech = newSpeech;
@@ -138,6 +138,9 @@ function getAction(parameters, action, docs) {
         case 'overall-sales':
           speech += overallSales(parameters, docs);
           break;
+        case 'overall-sales.overall-sales-yes':
+          speech += salesAllBrands(parameters, docs);
+          break;
         case 'sales-by-brand':
             speech += salesByBrand(parameters, docs);
             break;
@@ -168,7 +171,31 @@ function overallSales(parameters, salesData) {
     speech = 'Here are the sales figures for ' + parameters.date + ' Total sales for' + parameters.date + ' is $' + totalSales; 
   return speech;
 }
-                
+    
+function salesAllBrands(parameters, salesData) {
+  var speech = '' ;
+
+  var totalSales = 0;
+    
+  for (var saveBrand of allBrands) { 
+
+    for (var brand of salesData[0].brands) {
+      
+      if (brand.brand == saveBrand) {
+        for (var channel of brand.channels) {
+          totalSales += channel.sales;
+        }
+      }
+    } 
+    speech += saveBrand + ' is $' + totalSales + ' ';
+    totalSales = 0; 
+  }
+
+    speech = 'Sales for ' + speech;
+  return speech;
+  
+}
+
 function salesByBrand(parameters, salesData) {
     var speech = '' ;
     
@@ -184,7 +211,7 @@ function salesByBrand(parameters, salesData) {
       }
     } 
 
-    speech = 'Sales for ' + parameters.brand + ' is $' + totalSales;   
+    speech = 'Total sales for ' + parameters.brand + ' is $' + totalSales;   
   return speech;
   
 }
