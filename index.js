@@ -168,7 +168,7 @@ function overallSales(parameters, salesData) {
       }
     } 
 
-    speech = 'Here are the sales figures for ' + parameters.date + ' Total sales for' + parameters.date + ' is $' + totalSales; 
+    speech = 'Total sales figures for ' + parameters.date + ' is ' + totalSales + '. Would you like to know the sales figure for your brands?'; 
   return speech;
 }
     
