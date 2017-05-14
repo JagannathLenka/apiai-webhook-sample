@@ -118,7 +118,7 @@ function getSalesFigureFromMongo(res, parameters, action) {
           if (docs.length > 0) {
             res.json(getResponse(getAction(parameters, action, docs), ''));
           }else {
-           res.json(getResponse('Sorry I did not see any data for ' + parameters.date + ' , please let me know any other date" , '')); 
+           res.json(getResponse('Sorry I did not see any data for ' + parameters.date + ' , please let me know any other date' , '')); 
           }
           
           }  
