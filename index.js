@@ -56,7 +56,26 @@ restService.post('/hook', function (req, res) {
         });
     }
 });
-                
+         
+
+restService.post('/add', function (req, res) {
+
+    try {
+          speech = req.body.result.parameters.number1 + ' and ' + req.body.result.parameters.number2 + " makes "
+          speech += req.body.result.parameters.number1 + req.body.result.parameters.number2;
+          res.json(getResponse(speech, ""));
+    } catch (err) {
+        console.error("Can't process request", err);
+
+        return res.status(400).json({
+            status: {
+                code: 400,
+                errorType: err.message
+            }
+        });
+    }
+});
+
                 
 restService.listen((process.env.PORT || 5000), function () {
     console.log("Server listening");
